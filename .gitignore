@@ -1,0 +1,19 @@
+# Build output and local dependencies
+frontend/node_modules/
+frontend/dist/
+backend/target/
+
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Personal notes and runtime data stay out of Git; retain scaffold markers only
+data/**
+!data/**/
+!data/**/.gitkeep
+
+# Local database files
+*.db
+*.sqlite
+*.sqlite3
