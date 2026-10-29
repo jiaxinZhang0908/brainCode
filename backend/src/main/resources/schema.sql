@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS daily_records (
   id TEXT PRIMARY KEY,
   record_date TEXT NOT NULL,
   body TEXT NOT NULL,
+  image_data TEXT NOT NULL DEFAULT '',
   created_at TEXT NOT NULL
 );
 

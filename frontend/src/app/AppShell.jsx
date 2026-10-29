@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 
 const links = [
   { to: '/', label: '今日主页', icon: '◷', end: true },
@@ -7,15 +7,16 @@ const links = [
 ]
 
 export default function AppShell() {
+  const { pathname } = useLocation()
+  const home = pathname === '/'
   return <div className="app-shell">
-    <aside className="sidebar">
-      <div className="brand"><span className="brand-mark">芽</span><div><strong>脑内花园</strong><small>PERSONAL LEARNING SPACE</small></div></div>
-      <div className="nav-label">工作台</div>
-      <nav>{links.map(link => <NavLink key={link.to} to={link.to} end={link.end} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-        <span className="nav-icon">{link.icon}</span>{link.label}<span className="nav-arrow">↗</span>
+    <header className="topbar glass-surface">
+      <NavLink to="/" className="brand"><span className="brand-mark">芽</span><div><strong>脑内花园</strong><small>PERSONAL LEARNING SPACE</small></div></NavLink>
+      <nav className="top-nav">{links.map(link => <NavLink key={link.to} to={link.to} end={link.end} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+        <span className="nav-icon">{link.icon}</span>{link.label}
       </NavLink>)}</nav>
-      <div className="sidebar-bottom"><div className="weather-dot" /><div><span>慢慢来，比较快</span><small>每天一点点就很好</small></div></div>
-    </aside>
-    <main className="main-area"><Outlet /></main>
+      <div className="topbar-note"><i /> 慢慢来，比较快</div>
+    </header>
+    <main className={`main-area ${home ? 'home-scene' : ''}`}><Outlet /></main>
   </div>
 }
