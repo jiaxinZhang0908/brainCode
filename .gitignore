@@ -1,19 +1,29 @@
-# Build output and local dependencies
+# 构建产物与依赖
 frontend/node_modules/
 frontend/dist/
 backend/target/
 
-# Local secrets
+# 本地密钥
 .env
 .env.*
 !.env.example
 
-# Personal notes and runtime data stay out of Git; retain scaffold markers only
-data/**
-!data/**/
-!data/**/.gitkeep
+# 个人数据与运行时文件（数据库、Markdown 笔记、全文索引）
+data/
+backend/data/
 
-# Local database files
+# 本地数据库文件
 *.db
 *.sqlite
 *.sqlite3
+
+# 编辑器与本地工具
+.idea/
+.vscode/
+.workbuddy/
+*.iml
+
+# 系统与日志
+.DS_Store
+Thumbs.db
+*.log

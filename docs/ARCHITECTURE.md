@@ -61,7 +61,7 @@ brainCode/
 | 前端 | Vite 8 + React 19 + React Flow 12 | 已确认。React Flow 用于可交互知识图谱；三个页面独立维护，路由和共享 UI 集中管理。Vite 需要 Node.js 20.19+ 或 22.12+。 |
 | 后端 | Java 17+、Maven、Spring Boot 3.5 | 使用 Spring Web 提供 JSON API，Spring JDBC 访问 SQLite。 |
 | 数据库 | SQLite + SQLite JDBC | 存结构化元数据、图谱节点和边、复习状态、计划与用户配置。 |
-| 笔记 | Markdown 文件 + commonmark-java | 笔记正文以文件保存，数据库存路径、标题、时间和索引状态等元数据。 |
+| 笔记 | Markdown 文件 | 笔记正文以 `.md` 文件保存，数据库存路径、标题、时间和索引状态等元数据；对外直接返回正文，不再做服务端 Markdown 渲染。 |
 | 知识检索 | Apache Lucene 9 本地全文索引 | 首版用 CJK 分词做关键词/全文检索；当数据量和使用场景需要时再评估语义向量检索与本地 embedding。索引从 Markdown 重建。 |
 | 关系和计划建议 | Ollama + DeepSeek API | 已确认两种接入方式。后端统一提供模型适配接口，配置选择提供方；密钥只从本机配置读取。 |
 | 复习调度 | FSRS Java 库候选：`io.github.open-spaced-repetition:fsrs:1.0.0` | 初步评估后优先采用现成库；封装本地调度适配层，复习算法不依赖 LLM/API，持久化每张卡片状态和复习日志。 |

@@ -43,6 +43,12 @@ CREATE TABLE IF NOT EXISTS review_logs (
   due_after TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS review_forecasts (
+  card_id TEXT PRIMARY KEY REFERENCES review_cards(id) ON DELETE CASCADE,
+  items_json TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS study_plans (
   id TEXT PRIMARY KEY,
   note_id TEXT NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
@@ -62,6 +68,13 @@ CREATE TABLE IF NOT EXISTS daily_records (
   created_at TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS gallery_photos (
+  id TEXT PRIMARY KEY,
+  image_data TEXT NOT NULL,
+  caption TEXT NOT NULL DEFAULT '',
+  created_at TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS learning_tasks (
   id TEXT PRIMARY KEY,
   plan_id TEXT NOT NULL REFERENCES study_plans(id) ON DELETE CASCADE,
@@ -72,8 +85,19 @@ CREATE TABLE IF NOT EXISTS learning_tasks (
   done INTEGER NOT NULL DEFAULT 0
 );
 
+CREATE TABLE IF NOT EXISTS calendar_events (
+  id TEXT PRIMARY KEY,
+  event_date TEXT NOT NULL,
+  event_time TEXT NOT NULL DEFAULT '',
+  title TEXT NOT NULL,
+  description TEXT NOT NULL DEFAULT '',
+  created_at TEXT NOT NULL
+);
+
 CREATE INDEX IF NOT EXISTS idx_review_due ON review_cards(due_at, suspended);
 CREATE INDEX IF NOT EXISTS idx_review_logs_reviewed ON review_logs(reviewed_at);
 CREATE INDEX IF NOT EXISTS idx_edges_source ON knowledge_edges(source_id);
 CREATE INDEX IF NOT EXISTS idx_edges_target ON knowledge_edges(target_id);
 CREATE INDEX IF NOT EXISTS idx_learning_tasks_date ON learning_tasks(task_date, done);
+CREATE INDEX IF NOT EXISTS idx_gallery_photos_created ON gallery_photos(created_at);
+CREATE INDEX IF NOT EXISTS idx_calendar_events_date ON calendar_events(event_date);

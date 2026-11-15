@@ -1,7 +1,5 @@
 package local.braincode.brain;
 
-import org.commonmark.parser.Parser;
-import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,8 +10,6 @@ import java.util.Map;
 public class NoteController {
     public record NoteInput(String title, String body) {}
     private final NoteService notes;
-    private final Parser markdownParser = Parser.builder().build();
-    private final HtmlRenderer htmlRenderer = HtmlRenderer.builder().escapeHtml(true).build();
 
     public NoteController(NoteService notes) { this.notes = notes; }
 
@@ -24,7 +20,6 @@ public class NoteController {
     Map<String, Object> get(@PathVariable String id) {
         NoteService.Note note = notes.get(id);
         return Map.of("id", note.id(), "title", note.title(), "body", note.body(),
-                "html", htmlRenderer.render(markdownParser.parse(note.body())),
                 "createdAt", note.createdAt(), "updatedAt", note.updatedAt());
     }
 

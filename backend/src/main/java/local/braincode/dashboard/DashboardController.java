@@ -24,6 +24,10 @@ public class DashboardController {
         catch (org.springframework.dao.DataAccessException alreadyMigrated) {
             if (alreadyMigrated.getMessage() == null || !alreadyMigrated.getMessage().toLowerCase().contains("duplicate column")) throw alreadyMigrated;
         }
+        try { jdbc.execute("ALTER TABLE calendar_events ADD COLUMN event_time TEXT NOT NULL DEFAULT ''"); }
+        catch (org.springframework.dao.DataAccessException alreadyMigrated) {
+            if (alreadyMigrated.getMessage() == null || !alreadyMigrated.getMessage().toLowerCase().contains("duplicate column")) throw alreadyMigrated;
+        }
     }
 
     @GetMapping
@@ -37,7 +41,7 @@ public class DashboardController {
         List<Map<String, Object>> learning = jdbc.queryForList(
                 "SELECT t.id,t.task_date,t.day_number,t.minutes,t.content,p.title AS plan_title " +
                         "FROM learning_tasks t JOIN study_plans p ON p.id=t.plan_id " +
-                        "WHERE t.task_date<=? AND t.done=0 AND p.status='ACTIVE' ORDER BY t.task_date,t.day_number LIMIT 30", todayText);
+                        "WHERE t.task_date<=? AND (t.done=0 OR t.task_date=?) AND p.status='ACTIVE' ORDER BY t.task_date,t.day_number LIMIT 30", todayText, todayText);
         List<Map<String, Object>> reviews = jdbc.queryForList(
                 "SELECT c.id,c.note_id,c.prompt,c.due_at,n.title AS note_title FROM review_cards c " +
                         "JOIN notes n ON n.id=c.note_id WHERE c.due_at<=? AND c.suspended=0 ORDER BY c.due_at LIMIT 30",
@@ -62,6 +66,10 @@ public class DashboardController {
                 "id", task.get("id"), "type", "review", "date", task.get("due_at").toString().substring(0, 10),
                 "title", task.get("note_title"), "content", task.get("prompt"), "minutes", 15, "done", 0,
                 "dayNumber", 0)));
+        jdbc.queryForList("SELECT id,event_date,event_time,title,description FROM calendar_events WHERE event_date>=? AND event_date<? ORDER BY event_date,created_at",
+                weekStart.toString(), weekEnd.toString()).forEach(event -> weekTasks.add(Map.of(
+                "id", event.get("id"), "type", "event", "date", event.get("event_date"),
+                "time", event.get("event_time"), "title", event.get("title"), "content", event.get("description"), "minutes", 0, "done", 0, "dayNumber", 0)));
         weekTasks.sort(java.util.Comparator.comparing(task -> task.get("date").toString()));
         List<Map<String, Object>> records = jdbc.queryForList(
                 "SELECT id,record_date,body,image_data,created_at FROM daily_records WHERE record_date=? ORDER BY created_at DESC", todayText);
@@ -74,6 +82,7 @@ public class DashboardController {
                 "learningTasks", learning, "reviewTasks", reviews,
                 "records", records, "calendar", calendar,
                 "stats", Map.of("notes", jdbc.queryForObject("SELECT COUNT(*) FROM notes", Integer.class),
+                        "learningTotal", jdbc.queryForObject("SELECT COUNT(*) FROM learning_tasks t JOIN study_plans p ON p.id=t.plan_id WHERE t.task_date=? AND p.status='ACTIVE'", Integer.class, todayText),
                         "reviewsToday", jdbc.queryForObject("SELECT COUNT(*) FROM review_logs WHERE substr(datetime(reviewed_at,'+8 hours'),1,10)=?", Integer.class, todayText),
                         "learningDone", jdbc.queryForObject("SELECT COUNT(*) FROM learning_tasks WHERE done=1 AND task_date=?", Integer.class, todayText)));
     }
@@ -109,5 +118,20 @@ public class DashboardController {
         int changed = jdbc.update("UPDATE learning_tasks SET done=1 WHERE id=?", id);
         if (changed == 0) throw new IllegalArgumentException("找不到这项学习任务");
         return Map.of("completed", true);
+    }
+
+    public record CalendarEventInput(String date, String time, String title, String description) {}
+
+    @PostMapping("/calendar/events")
+    Map<String, String> addCalendarEvent(@RequestBody CalendarEventInput input) {
+        if (input.date() == null || input.date().isBlank()) throw new IllegalArgumentException("请选择日历日期");
+        LocalDate.parse(input.date());
+        if (input.title() == null || input.title().isBlank()) throw new IllegalArgumentException("请填写事项名称");
+        String id = UUID.randomUUID().toString();
+        String time = input.time() == null ? "" : input.time().trim();
+        if (!time.isBlank() && !time.matches("(?:[01]\\d|2[0-3]):[0-5]\\d")) throw new IllegalArgumentException("请选择有效时间");
+        jdbc.update("INSERT INTO calendar_events(id,event_date,event_time,title,description,created_at) VALUES(?,?,?,?,?,?)",
+                id, input.date(), time, input.title().trim(), input.description() == null ? "" : input.description().trim(), java.time.Instant.now().toString());
+        return Map.of("id", id, "created", "true");
     }
 }

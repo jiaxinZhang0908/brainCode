@@ -18,10 +18,32 @@ public class FsrsReviewScheduler {
 
     public record NewCard(String stateJson, Instant dueAt) {}
     public record ReviewResult(String stateJson, Instant dueAt, String rating, LocalDate dueLocalDate) {}
+    public record ForecastItem(Instant dueAt, double stability, double retention, long intervalDays) {}
 
     public NewCard createCard() {
-        Card card = Card.builder().build();
+        return createCard(null);
+    }
+
+    public NewCard createCard(Instant firstReviewAt) {
+        Card card = firstReviewAt == null ? Card.builder().build() : Card.builder().due(firstReviewAt).build();
         return new NewCard(card.toJson(), card.getDue());
+    }
+
+    public java.util.List<ForecastItem> forecast(String stateJson, int count) {
+        Card card = Card.fromJson(stateJson);
+        Instant reviewAt = card.getDue().isAfter(Instant.now()) ? card.getDue() : Instant.now();
+        java.util.List<ForecastItem> items = new java.util.ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            CardAndReviewLog result = scheduler.reviewCard(card, Rating.GOOD, reviewAt);
+            card = result.card();
+            Instant due = card.getDue();
+            double stability = card.getStability() == null ? 0 : card.getStability();
+            double retention = scheduler.getCardRetrievability(card, due);
+            long interval = Math.max(0, java.time.Duration.between(reviewAt, due).toDays());
+            items.add(new ForecastItem(due, stability, retention, interval));
+            reviewAt = due;
+        }
+        return items;
     }
 
     public ReviewResult answer(String stateJson, String ratingName) {

@@ -1,0 +1,60 @@
+.learning-overview-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:13px}
+.learning-page-card.overview-stat{min-height:96px;padding:14px 18px;border-radius:17px}
+.learning-page-card.overview-stat>div{margin-top:5px;gap:14px}
+.learning-page-card.overview-stat .scene-ring{width:62px;height:62px}
+.learning-page-card.overview-stat .scene-ring:before{inset:5px}
+.learning-page-card.overview-stat .scene-ring strong{font-size:13px}
+.learning-page-card.overview-stat .scene-ring span{font-size:7px}
+.learning-page-card.overview-stat p{font-size:10px}
+.learning-page-card.overview-stat p b{font-size:16px}
+.learning-page-grid{grid-template-columns:minmax(0,1.75fr) minmax(250px,.58fr);align-items:stretch}
+.mac-calendar{padding:14px 17px!important;min-height:520px!important;display:flex;flex-direction:column;overflow:hidden}
+.mac-calendar .week-calendar-toolbar{height:40px;flex:none;padding:0 2px 8px}
+.mac-calendar .week-calendar-controls{gap:5px}
+.mac-calendar .week-calendar-controls button{height:28px;min-width:28px}
+.mac-calendar .week-calendar-controls h3{font-size:16px}
+.calendar-view-switch{display:flex;gap:2px;padding:3px;border-radius:9px;background:rgba(6,23,31,.25)}
+.calendar-view-switch button{border:0;border-radius:7px;background:transparent;color:rgba(239,249,249,.66);padding:5px 10px;font-size:9px}
+.calendar-view-switch button.active{background:rgba(238,249,249,.22);color:white}
+.calendar-view-switch button:disabled{opacity:.65}
+.mac-day-head{display:grid;grid-template-columns:48px 1fr;flex:none;border-top:1px solid rgba(241,250,250,.15)}
+.mac-day-labels{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.mac-day-labels>div{position:relative;height:50px;border-left:1px solid rgba(241,250,250,.11);display:grid;align-content:center;justify-items:center;gap:3px;color:rgba(237,248,248,.72)}
+.mac-day-labels small{font-size:8px}.mac-day-labels b{font-size:13px;font-weight:500;color:#fff}
+.mac-day-labels>div.is-today b{display:grid;place-items:center;width:23px;height:23px;border-radius:50%;background:#9bd8d0;color:#16353b}
+.mac-day-labels button{position:absolute;right:4px;top:3px;width:18px;height:18px;border:0;border-radius:6px;background:transparent;color:rgba(240,250,250,.7);font-size:14px;opacity:0}
+.mac-day-labels>div:hover button,.mac-day-labels button:focus-visible{opacity:1}
+.mac-allday-row{display:grid;grid-template-columns:48px repeat(7,minmax(0,1fr));flex:none;min-height:56px;max-height:110px;overflow-y:auto;border-top:1px solid rgba(241,250,250,.14);border-bottom:1px solid rgba(241,250,250,.18)}
+.mac-allday-row>span{padding:7px 4px 0;color:rgba(232,245,245,.52);font-size:8px}
+.mac-allday-row>div{min-width:0;padding:4px 3px;border-left:1px solid rgba(241,250,250,.1);display:grid;align-content:start;gap:3px}
+.mac-event{min-width:0;border-radius:5px;padding:4px 5px;border-left:3px solid #78bfd0;background:rgba(52,133,164,.48);color:#f5fbfb;overflow:hidden}
+.mac-event strong,.mac-event small{display:block;overflow:hidden;text-overflow:ellipsis}
+.mac-event strong{font-size:8px;line-height:1.3}.mac-event small{font-size:7px;opacity:.82;white-space:nowrap}
+.mac-event.review-event{background:rgba(80,143,112,.53);border-left-color:#9bd2a5}
+.mac-event.personal-event{background:rgba(174,133,75,.58);border-left-color:#f1c879}
+.mac-event.event-done{opacity:.55;text-decoration:line-through}
+.mac-time-grid{display:grid;grid-template-columns:48px repeat(7,minmax(0,1fr));overflow:auto;flex:1;min-height:0;max-height:calc(100vh - 440px);scrollbar-color:rgba(231,246,246,.25) transparent;scrollbar-width:thin}
+.mac-time-grid>aside{display:grid;grid-template-rows:repeat(15,52px);color:rgba(233,245,245,.55);font-size:8px;text-align:right;padding-right:6px}
+.mac-time-grid>aside span{transform:translateY(-5px)}
+.mac-time-day{position:relative;display:grid;grid-template-rows:repeat(15,52px);min-width:0;border-left:1px solid rgba(241,250,250,.11)}
+.mac-time-day>i{display:block;border-top:1px solid rgba(241,250,250,.12)}
+.mac-time-day.is-today{background:rgba(139,207,198,.035)}
+.mac-time-day .timed-event{position:absolute;left:3px;right:3px;min-height:44px;max-height:150px;z-index:1}
+.week-calendar-legend{padding-top:8px!important;flex:none}
+.event-legend{background:#d1a75f}
+.learning-agenda{min-height:520px!important}
+.learning-agenda .full-task-list{max-height:calc(100vh - 360px);overflow-y:auto}
+.week-day-column>header{position:relative}
+.week-day-column>header button{position:absolute;right:5px;top:5px;width:23px;height:23px;border:1px solid rgba(241,250,250,.2);border-radius:7px;background:rgba(230,246,247,.08);color:rgba(238,249,249,.7);font-size:16px;line-height:1;opacity:0;transition:opacity .15s,background .15s}
+.week-day-column:hover>header button,.week-day-column>header button:focus-visible{opacity:1}
+.week-day-column>header button:hover{background:rgba(230,246,247,.2);color:white}
+.week-event.personal-event{background:linear-gradient(145deg,rgba(192,151,93,.58),rgba(129,102,68,.48));border-color:rgba(251,222,168,.28)}
+.scene-task-row.task-completed{opacity:.58}
+.scene-task-row.task-completed strong,.scene-task-row.task-completed p{text-decoration:line-through;text-decoration-color:rgba(243,250,248,.72)}
+.scene-task-check.checked{border-color:#a8d7c5;background:#a8d7c5;position:relative}
+.scene-task-check.checked:after{content:'✓';position:absolute;inset:-2px 0 0;text-align:center;color:#173a32;font-size:11px;line-height:16px}
+.calendar-event-modal label{display:block;color:rgba(231,245,245,.78);font-size:11px;margin:13px 0}
+.calendar-event-modal input,.calendar-event-modal textarea{display:block;width:100%;margin-top:7px;border:1px solid rgba(240,250,251,.22);border-radius:10px;background:rgba(5,25,34,.27);color:#f4fbfb;padding:11px 12px;outline:0;font-size:12px}
+.calendar-event-modal input:focus,.calendar-event-modal textarea:focus{border-color:rgba(206,242,240,.7)}
+.calendar-event-modal textarea{resize:vertical;line-height:1.6}
+@media(max-width:760px){.learning-overview-row{grid-template-columns:1fr 1fr}.learning-page-grid{grid-template-columns:1fr}.mac-calendar{min-height:600px!important}.mac-time-grid{max-height:55vh;min-height:350px}.mac-day-head,.mac-allday-row,.mac-time-grid{grid-template-columns:38px repeat(7,minmax(76px,1fr))}.mac-calendar{overflow-x:auto}.mac-calendar>*{min-width:680px}.learning-agenda{min-height:360px!important}.learning-agenda .full-task-list{max-height:350px}}
